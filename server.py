@@ -8,7 +8,8 @@ image_net_proto = './VGG_ILSVRC_16_layers_deploy.prototxt'
 lstm_net_proto = './lrcn_word_to_preds.deploy.prototxt'
 vocab_path = './vocabulary.txt'
 
-c = Captioner(weights_path, image_net_proto, lstm_net_proto, vocab_path)
+# 0 = GPU
+c = Captioner(weights_path, image_net_proto, lstm_net_proto, vocab_path, 0)
 
 def get_caption(fname):
 	descriptor = c.image_to_descriptor(fname)
@@ -40,6 +41,12 @@ def upload_file():
             print 'finished nn', time() - start
             json = {'caption': caption, 'time': time() - start}
             return jsonify(json)
+        else:
+            return '''
+            <!doctype html>
+            <h1>Error</h1>
+            <p>Please upload a JPEG file.</p>
+            '''
     return '''
     <!doctype html>
     <h1>Upload picture</h1>
